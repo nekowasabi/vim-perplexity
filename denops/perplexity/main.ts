@@ -15,6 +15,6 @@ export async function main(denops: Denops): Promise<void> {
 
   const n = denops.name;
   await denops.cmd(
-    `command! DenopsTest call denops#notify("${n}", "world", [denops#request("${n}", "hello", [])])`,
+    `command! ChatPerplexity call denops#notify("${n}", "world", [denops#request("${n}", "hello", [])])`,
   );
 }
