@@ -30,8 +30,8 @@ export async function main(denops: Denops): Promise<void> {
       );
 
       if (response.ok) {
-        const data = await response.json();
         const line_num = await fn.line(denops, ".");
+        const data = await response.json();
         await fn.append(
           denops,
           line_num,
