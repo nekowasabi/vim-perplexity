@@ -2,25 +2,48 @@ import { Denops } from "https://deno.land/x/denops_std@v5.0.0/mod.ts";
 
 export async function main(denops: Denops): Promise<void> {
   denops.dispatcher = {
-    message() {
-      return Promise.resolve("HelloWorld");
-    },
-
-    async chat(text: unknown) {
+    async completion() {
       // perplexityのトークンセット
-      const aaa = await denops.eval("g:neosolarized_contrast");
+      const token = await denops.eval("g:perplexity_token");
+      // perplexityのモデルセット
+      const model = await denops.eval("g:perplexity_model");
+
+      // input
+      const prompt = await denops.call("input", "Prompt > ");
+
       // API叩く
-      await denops.cmd("echomsg text", {
-        text,
-      });
-      await denops.cmd("echomsg aaa", {
-        aaa,
-      });
+
+      const response = await fetch(
+        "https://api.perplexity.ai/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            model: model,
+            "messages": [
+              {
+                "role": "user",
+                "content": prompt,
+              },
+            ],
+          }),
+        },
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        await denops.call("setline", 1, data.choices[0].message.content);
+      } else {
+        console.error("Error:", response.statusText);
+      }
     },
   };
 
   const n = denops.name;
   await denops.cmd(
-    `command! ChatPerplexity call denops#notify("${n}", "chat", [denops#request("${n}", "message", [])])`,
+    `command! ChatPerplexity call denops#notify("${n}", "completion", [])`,
   );
 }
