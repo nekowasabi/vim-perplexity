@@ -1,17 +1,13 @@
 import { Denops } from "https://deno.land/x/denops_std@v5.0.0/mod.ts";
+import * as fn from "https://deno.land/x/denops_std@v5.0.0/function/mod.ts";
 
 export async function main(denops: Denops): Promise<void> {
+  const TOKEN = await denops.eval("g:perplexity_token");
+  const MODEL = await denops.eval("g:perplexity_model");
+
   denops.dispatcher = {
     async completion() {
-      // perplexityのトークンセット
-      const token = await denops.eval("g:perplexity_token");
-      // perplexityのモデルセット
-      const model = await denops.eval("g:perplexity_model");
-
-      // input
       const prompt = await denops.call("input", "Prompt > ");
-
-      // API叩く
 
       const response = await fetch(
         "https://api.perplexity.ai/chat/completions",
@@ -19,10 +15,10 @@ export async function main(denops: Denops): Promise<void> {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            "Authorization": `Bearer ${TOKEN}`,
           },
           body: JSON.stringify({
-            model: model,
+            model: MODEL,
             "messages": [
               {
                 "role": "user",
@@ -35,7 +31,12 @@ export async function main(denops: Denops): Promise<void> {
 
       if (response.ok) {
         const data = await response.json();
-        await denops.call("setline", 1, data.choices[0].message.content);
+        const line_num = await fn.line(denops, ".");
+        await fn.append(
+          denops,
+          line_num,
+          data.choices[0].message.content.split(/\r?\n/g),
+        );
       } else {
         console.error("Error:", response.statusText);
       }
@@ -44,6 +45,6 @@ export async function main(denops: Denops): Promise<void> {
 
   const n = denops.name;
   await denops.cmd(
-    `command! ChatPerplexity call denops#notify("${n}", "completion", [])`,
+    `command! CompletionPerplexity call denops#notify("${n}", "completion", [])`,
   );
 }
