@@ -1,6 +1,6 @@
 # vim-perplexity
 
-Simple client for Perplexity's API.
+Simple client for [Perplexity](https://docs.perplexity.ai/) API.
 
 # Requirements
 
@@ -25,5 +25,5 @@ let g:perplexity_model = 'llama-2-70b-chat or other LLM'
 # Usage
 
 ```
-:CompletionPerplexity
+:CompletionPerplexit
 ```
