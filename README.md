@@ -25,5 +25,5 @@ let g:perplexity_model = 'llama-2-70b-chat or other LLM'
 # Usage
 
 ```
-:CompletionPerplexit
+:CompletionPerplexity
 ```
