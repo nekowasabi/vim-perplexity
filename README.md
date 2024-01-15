@@ -27,3 +27,9 @@ let g:perplexity_model = 'llama-2-70b-chat or other LLM'
 ```
 :CompletionPerplexity
 ```
+
+# TODO
+
+- [ ] Separate buffer
+- [ ] Save Chat Log
+- [ ] Selected text for completion
