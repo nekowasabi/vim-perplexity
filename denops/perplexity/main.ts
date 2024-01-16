@@ -6,6 +6,13 @@ export async function main(denops: Denops): Promise<void> {
   const MODEL = await denops.eval("g:perplexity_model");
 
   denops.dispatcher = {
+    async chat() {
+      await denops.cmd("new split");
+      await denops.cmd("setlocal buftype=nofile");
+      await denops.cmd("setlocal noswapfile");
+      await denops.cmd("setlocal bufhidden=wipe");
+      await denops.cmd("setlocal filetype=markdown");
+    },
     async completion() {
       const prompt = await denops.call("input", "Prompt > ");
 
@@ -46,5 +53,8 @@ export async function main(denops: Denops): Promise<void> {
   const n = denops.name;
   await denops.cmd(
     `command! CompletionPerplexity call denops#notify("${n}", "completion", [])`,
+  );
+  await denops.cmd(
+    `command! ChatPerplexity call denops#notify("${n}", "chat", [])`,
   );
 }
