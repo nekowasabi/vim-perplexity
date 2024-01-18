@@ -4,6 +4,8 @@ import * as fn from "https://deno.land/x/denops_std@v5.0.0/function/mod.ts";
 export async function main(denops: Denops): Promise<void> {
   const TOKEN = await denops.eval("g:perplexity_token");
   const MODEL = await denops.eval("g:perplexity_model");
+  const LOG_DIRECTORY = await denops.eval("g:perplexity_log_directory") ??
+    undefined;
 
   denops.dispatcher = {
     async chat() {
@@ -12,6 +14,8 @@ export async function main(denops: Denops): Promise<void> {
       await denops.cmd("setlocal noswapfile");
       await denops.cmd("setlocal bufhidden=wipe");
       await denops.cmd("setlocal filetype=markdown");
+
+      console.log(LOG_DIRECTORY);
     },
     async completion() {
       const prompt = await denops.call("input", "Prompt > ");
