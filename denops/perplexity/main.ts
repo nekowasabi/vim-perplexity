@@ -15,6 +15,7 @@ export async function main(denops: Denops): Promise<void> {
       await denops.cmd("setlocal bufhidden=wipe");
       await denops.cmd("setlocal filetype=markdown");
 
+      // for testing
       console.log(LOG_DIRECTORY);
     },
     async completion() {
