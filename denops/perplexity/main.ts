@@ -1,7 +1,7 @@
 import { Denops } from "https://deno.land/x/denops_std@v5.0.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v5.0.0/function/mod.ts";
 
-// The main function initializes the plugin and sets up the dispatcher and commands
+// main関数はプラグインを初期化し、ディスパッチャとコマンドを設定します
 export async function main(denops: Denops): Promise<void> {
   const TOKEN = await denops.eval("g:perplexity_token");
   const MODEL = await denops.eval("g:perplexity_model");
@@ -9,7 +9,7 @@ export async function main(denops: Denops): Promise<void> {
     undefined;
 
   denops.dispatcher = {
-    // The chat function opens a new split and sets up the buffer for chat
+    // chat関数は新しい分割を開き、チャットのバッファを設定します
     async chat() {
       await denops.cmd("new split");
       await denops.cmd("setlocal buftype=nofile");
@@ -20,7 +20,7 @@ export async function main(denops: Denops): Promise<void> {
       // for testing
       console.log(LOG_DIRECTORY);
     },
-    // The completion function sends a request to the Perplexity API and appends the response to the current line
+    // completion関数はPerplexity APIにリクエストを送信し、レスポンスを現在の行に追加します
     async completion() {
       const prompt = await denops.call("input", "Prompt > ");
 
@@ -59,11 +59,11 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   const n = denops.name;
-  // The CompletionPerplexity command triggers the completion function
+  // CompletionPerplexityコマンドはcompletion関数をトリガーします
   await denops.cmd(
     `command! CompletionPerplexity call denops#notify("${n}", "completion", [])`,
   );
-  // The ChatPerplexity command triggers the chat function
+  // ChatPerplexityコマンドはchat関数をトリガーします
   await denops.cmd(
     `command! ChatPerplexity call denops#notify("${n}", "chat", [])`,
   );
