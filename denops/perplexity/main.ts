@@ -1,6 +1,7 @@
 import { Denops } from "https://deno.land/x/denops_std@v5.0.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v5.0.0/function/mod.ts";
 
+// The main function initializes the plugin and sets up the dispatcher and commands
 export async function main(denops: Denops): Promise<void> {
   const TOKEN = await denops.eval("g:perplexity_token");
   const MODEL = await denops.eval("g:perplexity_model");
@@ -8,6 +9,7 @@ export async function main(denops: Denops): Promise<void> {
     undefined;
 
   denops.dispatcher = {
+    // The chat function opens a new split and sets up the buffer for chat
     async chat() {
       await denops.cmd("new split");
       await denops.cmd("setlocal buftype=nofile");
@@ -18,6 +20,7 @@ export async function main(denops: Denops): Promise<void> {
       // for testing
       console.log(LOG_DIRECTORY);
     },
+    // The completion function sends a request to the Perplexity API and appends the response to the current line
     async completion() {
       const prompt = await denops.call("input", "Prompt > ");
 
@@ -56,9 +59,11 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   const n = denops.name;
+  // The CompletionPerplexity command triggers the completion function
   await denops.cmd(
     `command! CompletionPerplexity call denops#notify("${n}", "completion", [])`,
   );
+  // The ChatPerplexity command triggers the chat function
   await denops.cmd(
     `command! ChatPerplexity call denops#notify("${n}", "chat", [])`,
   );
