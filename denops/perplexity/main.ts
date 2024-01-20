@@ -1,14 +1,14 @@
 import { Denops } from "https://deno.land/x/denops_std@v5.0.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v5.0.0/function/mod.ts";
+import * as v from "https://deno.land/x/denops_std@v5.2.0/variable/mod.ts";
 
 // main関数はプラグインを初期化し、ディスパッチャとコマンドを設定します
 export async function main(denops: Denops): Promise<void> {
   // プラグインの設定値を取得
   const TOKEN = await denops.eval("g:perplexity_token");
   const MODEL = await denops.eval("g:perplexity_model");
-  const LOG_DIRECTORY = await denops.eval("g:perplexity_log_directory") ??
-    undefined;
-
+  const LOG_DIRECTORY = await v.g.get(denops, "perplexity_log_directory") ?? undefined;
+  
   denops.dispatcher = {
     // chat関数は新しい分割を開き、チャットのバッファを設定します
     async chat() {
@@ -18,6 +18,7 @@ export async function main(denops: Denops): Promise<void> {
       await denops.cmd("setlocal noswapfile");
       await denops.cmd("setlocal bufhidden=wipe");
       await denops.cmd("setlocal filetype=markdown");
+
 
       // for testing
       console.log(LOG_DIRECTORY);
