@@ -59,11 +59,9 @@ export async function main(denops: Denops): Promise<void> {
   };
 
   const n = denops.name;
-  // CompletionPerplexityコマンドはcompletion関数をトリガーします
   await denops.cmd(
     `command! CompletionPerplexity call denops#notify("${n}", "completion", [])`,
   );
-  // ChatPerplexityコマンドはchat関数をトリガーします
   await denops.cmd(
     `command! ChatPerplexity call denops#notify("${n}", "chat", [])`,
   );
