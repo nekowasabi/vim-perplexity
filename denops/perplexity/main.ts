@@ -20,7 +20,8 @@ export async function main(denops: Denops): Promise<void> {
         await denops.cmd("edit ~/chat_log.md");
       } else {
         await denops.cmd("setlocal buftype=nofile");
-      }
+      await denops.cmd(logCmd);
+
       // 新しいウィンドウを開き、チャット用のバッファを設定する
       await denops.cmd("setlocal noswapfile");
       await denops.cmd("setlocal bufhidden=wipe");
@@ -32,7 +33,7 @@ export async function main(denops: Denops): Promise<void> {
       // for testing
       console.log(LOG_DIRECTORY);
     },
-    // completion関数はPerplexity APIにリクエストを送信し、レスポンスを現在の行に追加します
+    // レスポンスを現在の行に出力します
     async completion() {
       // ユーザーからのプロンプトを入力してもらう
       const prompt = await denops.call("input", "Prompt > ");
