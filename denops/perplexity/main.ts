@@ -12,14 +12,12 @@ export async function main(denops: Denops): Promise<void> {
     undefined;
 
   denops.dispatcher = {
-    // chat関数は新しい分割を開き、チャットのバッファを設定します
     async chat() {
-      // ログディレクトリが設定されている場合、ログを保存する
       await denops.cmd("new split");
-      if (LOG_DIRECTORY) {
-        await denops.cmd("edit ~/chat_log.md");
-      } else {
-        await denops.cmd("setlocal buftype=nofile");
+      const logCmd = LOG_DIRECTORY
+        ? "edit ~/chat_log.md"
+        : "setlocal buftype=nofile";
+
       await denops.cmd(logCmd);
 
       // 新しいウィンドウを開き、チャット用のバッファを設定する
